@@ -1,0 +1,6 @@
+*VENV/
+*/package-lock.json
+*/package.json
+*/node_models/*
+*__pycache__/
+*/.serverless/

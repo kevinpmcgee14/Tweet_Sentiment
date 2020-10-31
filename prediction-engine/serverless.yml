@@ -1,0 +1,33 @@
+app: Twitter-predictions
+service: predict
+
+provider:
+  name: aws
+  stackName: twitter-predictions
+  runtime: python3.6
+  timeout: 900
+  iamManagedPolicies:
+    - arn:aws:iam::aws:policy/AmazonS3FullAccess
+    - arn:aws:iam::aws:policy/AWSLambdaFullAccess
+  region: us-west-2
+
+
+  
+package: 
+  individually: true
+  
+# plugins:
+#   - serverless-python-requirements
+# custom:
+#     pythonRequirements:
+#       dockerizePip: non-linux
+#       slim: true
+
+functions:
+  predict:
+    handler: predictions.handler
+    module: predictions
+    include:
+      - install_compiled_dependencies.py
+    layers:
+      - arn:aws:lambda:us-west-2:934676248949:layer:pytorchv1-py36:2
