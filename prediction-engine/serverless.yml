@@ -11,23 +11,19 @@ provider:
     - arn:aws:iam::aws:policy/AWSLambdaFullAccess
   region: us-west-2
 
-
-  
-package: 
-  individually: true
   
 # plugins:
 #   - serverless-python-requirements
 # custom:
 #     pythonRequirements:
-#       dockerizePip: non-linux
-#       slim: true
+#       dockerizePip: true
+#       pipCmdExtraArgs:
+#       - --no-deps
 
 functions:
   predict:
     handler: predictions.handler
-    module: predictions
-    include:
-      - install_compiled_dependencies.py
+    exclude:
+      - requirements.txt
     layers:
       - arn:aws:lambda:us-west-2:934676248949:layer:pytorchv1-py36:2

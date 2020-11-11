@@ -1,24 +1,20 @@
-import streamlit as st 
 import json
+import pickle
 from twitter import TwitterApp
 import torch 
 import pandas as pd
+from io import BytesIO
 import altair as alt
 import pydeck as pdk
+import streamlit as st 
 from datetime import datetime, timedelta
-from model import BertForSequenceClassification, get_token
-from io import BytesIO
-from aws import aws_lambda
-
+from aws import aws_lambda, bucket
 
 tw = TwitterApp()
 
 @st.cache(show_spinner=False)
-def get_prediction(value):
-    token = get_token(value).unsqueeze(0)
-    if isinstance(token, torch.Tensor):
-        token = token.cpu().tolist()
-    event = json.dumps({'token': token})
+def get_prediction(text):
+    event = json.dumps({'text': text})
     pred_response = aws_lambda.invoke(
         FunctionName='predict-dev-predict',
         InvocationType='Event',
@@ -56,7 +52,8 @@ today = datetime.now().date()
 week_ago =  today - timedelta(days=7)
 date_range = sidebar.slider("How far back do you want to search? (Max 1 week)", min_value=week_ago, max_value=today, value=(week_ago, today), step=timedelta(days=1))
 
-button = st.button('Get the sentiment of the most {} tweets using {}'.format(search_type, hashtag_input))
+# 'Get the sentiment of the most {} tweets using {}'
+button = st.button('Analyze Tweets!'.format(search_type, hashtag_input))
 
 if button:
     hashtag_data = get_hashtag_data(hashtag_input, search_type, date_range)

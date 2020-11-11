@@ -1,0 +1,5 @@
+chardet
+# torch
+torchtext
+tqdm
+urllib3

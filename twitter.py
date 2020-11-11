@@ -32,7 +32,7 @@ class TwitterAuth(AuthBase):
 
   def __call__(self, r):
     r.headers['Authorization'] = f"Bearer %s" % self.bearer_token
-    r.headers['User-Agent'] = 'TwitterDevFilteredStreamQuickStartPython'
+    # r.headers['User-Agent'] = 'TwitterDevFilteredStreamQuickStartPython'
     return r
 
 class TwitterApp():
