@@ -1,6 +1,3 @@
-import sys 
-sys.path.insert(1, '/opt')
-import unzip_requirements
 import torch
 import torchtext
 from tokenizer import Tokenizer
@@ -26,7 +23,9 @@ def load_model(name):
 tokenizer = load_tokenizer(tokenizer_name)
 model = load_model(model_weights)
 
-def handler(event, context):
+def main(event, context):
+    if not event.get('text'):
+        return "Hello from Lambda!"
     token = torch.tensor(tokenizer(event['text']).unsqueeze(0))
     pred = model(token)
     pred = torch.argmax(pred).item()
